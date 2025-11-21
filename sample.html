@@ -7,67 +7,109 @@
 <style>
     body {
         margin: 0;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #ffe4ec, #e4f3ff);
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #ffd6e8, #d6ecff);
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        color: #333;
+        overflow: hidden;
     }
 
     .container {
         background: white;
-        padding: 20px;
-        border-radius: 20px;
-        box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
-        max-width: 400px;
+        padding: 25px;
+        border-radius: 25px;
+        box-shadow: 0px 10px 30px rgba(0,0,0,0.15);
+        max-width: 430px;
         width: 100%;
         text-align: center;
+        animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     video {
         width: 100%;
-        border-radius: 10px;
+        border-radius: 15px;
         margin-bottom: 10px;
+        box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+        animation: popIn 0.8s ease;
+    }
+
+    @keyframes popIn {
+        0% { transform: scale(0.9); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
     }
 
     button {
-        padding: 10px 20px;
+        padding: 12px 25px;
         border: none;
-        border-radius: 10px;
-        background: #ff77a9;
+        border-radius: 12px;
+        background: #ff66a3;
         color: white;
-        font-size: 16px;
+        font-size: 17px;
         cursor: pointer;
         transition: 0.3s;
+        margin-top: 10px;
     }
 
     button:hover {
-        background: #ff4f8a;
+        background: #ff3d89;
+        transform: scale(1.05);
     }
 
     .frame {
         display: flex;
         justify-content: space-between;
         margin-top: 20px;
+        animation: fadeIn 1s ease;
     }
 
     .frame img {
         width: 30%;
         aspect-ratio: 1/1;
-        border: 3px solid #ff9fcb;
-        border-radius: 10px;
+        border: 4px solid #ffa7d1;
+        border-radius: 12px;
         object-fit: cover;
-        background: #f7f7f7;
+        background: #fdfdfd;
+        transition: 0.4s;
+        box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+        animation: popIn 0.7s ease;
+    }
+
+    .frame img:hover {
+        transform: scale(1.08);
     }
 
     #finalFrame {
-        margin-top: 20px;
-        padding: 10px;
-        border: 4px solid #ff77a9;
+        margin-top: 25px;
+        padding: 15px;
+        border: 5px solid #ff66a3;
         border-radius: 20px;
         display: none;
+        background: #fff5fa;
+        animation: fadeIn 1s ease;
+    }
+
+    #downloadBtn {
+        padding: 10px 20px;
+        border-radius: 10px;
+        margin-top: 15px;
+        background: #66b3ff;
+        color: white;
+        cursor: pointer;
+        border: none;
+        font-size: 16px;
+        transition: 0.3s;
+    }
+
+    #downloadBtn:hover {
+        background: #3399ff;
+        transform: scale(1.05);
     }
 </style>
 </head>
@@ -86,11 +128,9 @@
 
         <div id="finalFrame">
             <h3>Your Photo Strip</h3>
-            <div class="frame">
-                <img id="final1" />
-                <img id="final2" />
-                <img id="final3" />
-            </div>
+            <canvas id="finalCanvas" width="900" height="300" style="display:none;"></canvas>
+            <img id="finalPreview" style="width:100%; border-radius:15px;" />
+            <button id="downloadBtn">Download Photo Strip</button>
         </div>
 
         <canvas id="canvas" style="display:none;"></canvas>
@@ -124,13 +164,40 @@ captureBtn.addEventListener("click", () => {
     counter.textContent = `Captured: ${images.length} / 3`;
 
     if (images.length === 3) {
-        document.getElementById("final1").src = images[0];
-        document.getElementById("final2").src = images[1];
-        document.getElementById("final3").src = images[2];
+        generateFinalStrip();
         document.getElementById("finalFrame").style.display = "block";
         captureBtn.disabled = true;
         captureBtn.textContent = "Completed";
     }
+});
+
+function generateFinalStrip() {
+    let finalCanvas = document.getElementById("finalCanvas");
+    let fctx = finalCanvas.getContext("2d");
+
+    let width = finalCanvas.width;
+    let height = finalCanvas.height;
+
+    fctx.fillStyle = "#ffe6f2";
+    fctx.fillRect(0, 0, width, height);
+
+    let imgWidth = width / 3;
+
+    images.forEach((src, i) => {
+        let img = new Image();
+        img.onload = () => {
+            fctx.drawImage(img, i * imgWidth, 0, imgWidth, height);
+            document.getElementById("finalPreview").src = finalCanvas.toDataURL();
+        };
+        img.src = src;
+    });
+}
+
+document.getElementById("downloadBtn").addEventListener("click", () => {
+    let link = document.createElement("a");
+    link.download = "photo_strip.png";
+    link.href = document.getElementById("finalCanvas").toDataURL();
+    link.click();
 });
 </script>
 </body>
