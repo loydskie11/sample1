@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Digital Photobooth</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #ffe4ec, #e4f3ff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #333;
+    }
+
+    .container {
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+    }
+
+    video {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        background: #ff77a9;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #ff4f8a;
+    }
+
+    .frame {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .frame img {
+        width: 30%;
+        aspect-ratio: 1/1;
+        border: 3px solid #ff9fcb;
+        border-radius: 10px;
+        object-fit: cover;
+        background: #f7f7f7;
+    }
+
+    #finalFrame {
+        margin-top: 20px;
+        padding: 10px;
+        border: 4px solid #ff77a9;
+        border-radius: 20px;
+        display: none;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h2>📸 Digital Photobooth</h2>
+        <video id="camera" autoplay></video>
+        <button id="captureBtn">Capture Photo</button>
+        <p id="counter">Captured: 0 / 3</p>
+
+        <div class="frame">
+            <img id="img1" />
+            <img id="img2" />
+            <img id="img3" />
+        </div>
+
+        <div id="finalFrame">
+            <h3>Your Photo Strip</h3>
+            <div class="frame">
+                <img id="final1" />
+                <img id="final2" />
+                <img id="final3" />
+            </div>
+        </div>
+
+        <canvas id="canvas" style="display:none;"></canvas>
+    </div>
+
+<script>
+let video = document.getElementById("camera");
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+let captureBtn = document.getElementById("captureBtn");
+let counter = document.getElementById("counter");
+let images = [];
+
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(stream => {
+    video.srcObject = stream;
+})
+.catch(err => alert("Camera access denied!"));
+
+captureBtn.addEventListener("click", () => {
+    if (images.length >= 3) return;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0);
+    let dataUrl = canvas.toDataURL("image/png");
+
+    images.push(dataUrl);
+    document.getElementById(`img${images.length}`).src = dataUrl;
+
+    counter.textContent = `Captured: ${images.length} / 3`;
+
+    if (images.length === 3) {
+        document.getElementById("final1").src = images[0];
+        document.getElementById("final2").src = images[1];
+        document.getElementById("final3").src = images[2];
+        document.getElementById("finalFrame").style.display = "block";
+        captureBtn.disabled = true;
+        captureBtn.textContent = "Completed";
+    }
+});
+</script>
+</body>
+</html>
