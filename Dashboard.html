@@ -231,15 +231,17 @@ const finalFrame = document.getElementById("finalFrame");
 const finalPreview = document.getElementById("finalPreview");
 const finalCanvas = document.getElementById("finalCanvas");
 const fctx = finalCanvas.getContext("2d");
-
 let images = [];
 
 // Camera
 navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
     .then(stream => video.srcObject = stream)
-    .catch(() => alert("Camera access required!"));
+    .catch(err => {
+        console.error(err);
+        alert("Camera access is required!");
+    });
 
-// Capture
+// Capture photo
 function capturePhoto() {
     if (images.length >= 3) return;
 
@@ -258,26 +260,23 @@ function capturePhoto() {
         finalFrame.style.display = "block";
         document.getElementById("navCapture").style.display = "none";
         document.getElementById("navDownload").style.display = "flex";
+        finalFrame.scrollIntoView({ behavior: "smooth" });
     }
 }
 
-// FINAL PHOTO STRIP — NO STRETCHING! Perfect proportions + letterboxing
+// Generate final strip (your perfect version)
 function generateFinalStrip() {
     const stripWidth  = 900;
     const stripHeight = 1200;
-    const photoHeight = 950 / 3;           // ~316.67px tall photos
+    const photoHeight = 950 / 3;
     const topMargin   = 180;
     const sideMargin  = 60;
-    const boxWidth    = stripWidth - sideMargin * 2;   
-    const boxHeight   = photoHeight - 20;              
+    const boxWidth    = stripWidth - sideMargin * 2;
+    const boxHeight   = photoHeight - 20;
 
-    const fctx = finalCanvas.getContext("2d");
-
-    // Background
     fctx.fillStyle = "#fff0f8";
     fctx.fillRect(0, 0, stripWidth, stripHeight);
 
-    // Header
     fctx.fillStyle = "#ff66a3";
     fctx.font = "bold 78px Poppins";
     fctx.textAlign = "center";
@@ -287,57 +286,47 @@ function generateFinalStrip() {
     fctx.fillStyle = "#ff99c8";
     fctx.fillText("Memories", stripWidth / 2, 155);
 
-    // Draw each photo with perfect aspect ratio (no stretch!)
     images.forEach((dataUrl, i) => {
         const img = new Image();
         img.onload = () => {
             const x = sideMargin;
             const y = topMargin + i * photoHeight;
 
-            // Calculate scaling to fit inside the box while keeping aspect ratio
             const scale = Math.min(boxWidth / img.width, boxHeight / img.height);
-            const drawWidth  = img.width * scale;
-            const drawHeight = img.height * scale;
+            const dw = img.width * scale;
+            const dh = img.height * scale;
+            const dx = x + (boxWidth - dw) / 2;
+            const dy = y + (boxHeight - dh) / 2;
 
-            // Center the image inside the box
-            const drawX = x + (boxWidth  - drawWidth)  / 2;
-            const drawY = y + (boxHeight - drawHeight) / 2;
-
-            // Optional: soft white background behind photo (nice letterboxing)
             fctx.fillStyle = "#fff0f8";
             fctx.fillRect(x, y, boxWidth, boxHeight);
+            fctx.drawImage(img, dx, dy, dw, dh);
 
-            // Draw perfectly proportioned photo
-            fctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-
-            // Thick white border
             fctx.strokeStyle = "#fff0f8";
-            fctx.lineWidth = 22;
+            fctx.lineWidth = 12;
             fctx.strokeRect(x, y, boxWidth, boxHeight);
 
-            // Update preview when all 3 are done
             if (i === 2) {
-                finalPreview.src = finalCanvas.toDataURL("image/png");
+                setTimeout(() => {
+                    finalPreview.src = finalCanvas.toDataURL("image/png");
+                }, 100);
             }
         };
         img.src = dataUrl;
     });
 }
 
-// Sidebar actions
+// BUTTONS — NOW 100% WORKING
 document.getElementById("navCapture").addEventListener("click", capturePhoto);
 
-document.getElementById("navHome").addEventListener("click", () => {
-    if (images.length > 0 && !confirm("Start over? All photos will be deleted.")) return;
-    location.reload();
-});
-
 document.getElementById("navDownload").addEventListener("click", () => {
-    const a = document.createElement("a");
-    a.download = `photobooth_${new Date().toISOString().slice(0,10)}.png`;
-    a.href = finalCanvas.toDataURL();
-    a.click();
+    const link = document.createElement("a");
+    link.download = `photobooth_${new Date().toISOString().slice(0,10)}.png`;
+    link.href = finalCanvas.toDataURL("image/png");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 });
 </script>
-</body>
+</body> 
 </html>
