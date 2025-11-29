@@ -1,204 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Digital Photobooth</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-        margin: 0;
         font-family: 'Poppins', sans-serif;
         background: linear-gradient(135deg, #ffd6e8, #d6ecff);
-        display: flex;
-        justify-content: center;
-        align-items: center;
         height: 100vh;
-        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #333;
     }
-
-    .container {
+    .card {
         background: white;
-        padding: 25px;
-        border-radius: 25px;
-        box-shadow: 0px 10px 30px rgba(0,0,0,0.15);
-        max-width: 430px;
-        width: 100%;
+        padding: 5px 40px;
+        border-radius: 35px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.18);
         text-align: center;
-        animation: fadeIn 1s ease forwards;
+        max-width: 520px;
+        width: 90%;
+ 
     }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    video {
-        width: 100%;
-        border-radius: 15px;
+    /* Safe gradient text – works everywhere */
+    .gradient-text {
+        font-size: 52px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ff66a3, #ff99c8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: inline-block;
+        margin-top: 20px;
         margin-bottom: 10px;
-        box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
-        animation: popIn 0.8s ease;
     }
 
-    @keyframes popIn {
-        0% { transform: scale(0.9); opacity: 0; }
-        100% { transform: scale(1); opacity: 1; }
-    }
+    p { font-size: 19px; line-height: 1.7; margin: 5px 0; color: #555; }
 
-    button {
-        padding: 12px 25px;
-        border: none;
-        border-radius: 12px;
+    .features {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 40px 0;
+    }
+    .feat {
+        background: #fff0f8;
+        padding: 25px;
+        border-radius: 20px;
+        border: 3px dashed #ff99c8;
+    }
+    .feat i { font-size: 42px; color: #ff66a3; margin-bottom: 12px; }
+
+    .btn {
         background: #ff66a3;
         color: white;
-        font-size: 17px;
-        cursor: pointer;
-        transition: 0.3s;
-        margin-top: 10px;
-    }
-
-    button:hover {
-        background: #ff3d89;
-        transform: scale(1.05);
-    }
-
-    .frame {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-        animation: fadeIn 1s ease;
-    }
-
-    .frame img {
-        width: 30%;
-        aspect-ratio: 1/1;
-        border: 4px solid #ffa7d1;
-        border-radius: 12px;
-        object-fit: cover;
-        background: #fdfdfd;
-        transition: 0.4s;
-        box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
-        animation: popIn 0.7s ease;
-    }
-
-    .frame img:hover {
-        transform: scale(1.08);
-    }
-
-    #finalFrame {
-        margin-top: 25px;
-        padding: 15px;
-        border: 5px solid #ff66a3;
-        border-radius: 20px;
-        display: none;
-        background: #fff5fa;
-        animation: fadeIn 1s ease;
-    }
-
-    #downloadBtn {
-        padding: 10px 20px;
-        border-radius: 10px;
-        margin-top: 15px;
-        background: #66b3ff;
-        color: white;
-        cursor: pointer;
         border: none;
-        font-size: 16px;
+        padding: 20px 50px;
+        font-size: 22px;
+        font-weight: 600;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 12px 35px rgba(255,102,163,0.4);
         transition: 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn:hover {
+        transform: translateY(-8px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(255,102,163,0.5);
     }
 
-    #downloadBtn:hover {
-        background: #3399ff;
-        transform: scale(1.05);
+    footer {
+        margin-top: 15px;
+        margin-bottom: 10px;
+        color: #ff66a3;
+        font-size: 16px;
     }
 </style>
 </head>
 <body>
-    <div class="container">
-        <h2>📸 Digital Photobooth</h2>
-        <video id="camera" autoplay></video>
-        <button id="captureBtn">Capture Photo</button>
-        <p id="counter">Captured: 0 / 3</p>
 
-        <div class="frame">
-            <img id="img1" />
-            <img id="img2" />
-            <img id="img3" />
+<div class="card">
+    <h1 class="gradient-text">Digital Photobooth</h1>
+    <p>Ready to create fun memories? Take 3 photos and get a beautiful photo strip instantly!</p>
+
+    <div class="features">
+        <div class="feat">
+            <i class="fas fa-camera"></i>
+            <h3>3 Quick Shots</h3>
         </div>
-
-        <div id="finalFrame">
-            <h3>Your Photo Strip</h3>
-            <canvas id="finalCanvas" width="900" height="300" style="display:none;"></canvas>
-            <img id="finalPreview" style="width:100%; border-radius:15px;" />
-            <button id="downloadBtn">Download Photo Strip</button>
+        <div class="feat">
+            <i class="fas-magic"></i>
+            <h3>Auto Magic Strip</h3>
         </div>
-
-        <canvas id="canvas" style="display:none;"></canvas>
+        <div class="feat">
+            <i class="fas-heart"></i>
+            <h3>Perfect for Events</h3>
+        </div>
+        <div class="feat">
+            <i class="fas-download"></i>
+            <h3>Instant Download</h3>
+        </div>
     </div>
 
-<script>
-let video = document.getElementById("camera");
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
-let captureBtn = document.getElementById("captureBtn");
-let counter = document.getElementById("counter");
-let images = [];
+    <a href="Dashboard.html" class="btn">Start Photobooth</a>
 
-navigator.mediaDevices.getUserMedia({ video: true })
-.then(stream => {
-    video.srcObject = stream;
-})
-.catch(err => alert("Camera access denied!"));
+    <footer>
+        Made with <i class="fas fa-heart"></i> for unforgettable moments
+    </footer>
+</div>
 
-captureBtn.addEventListener("click", () => {
-    if (images.length >= 3) return;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0);
-    let dataUrl = canvas.toDataURL("image/png");
-
-    images.push(dataUrl);
-    document.getElementById(`img${images.length}`).src = dataUrl;
-
-    counter.textContent = `Captured: ${images.length} / 3`;
-
-    if (images.length === 3) {
-        generateFinalStrip();
-        document.getElementById("finalFrame").style.display = "block";
-        captureBtn.disabled = true;
-        captureBtn.textContent = "Completed";
-    }
-});
-
-function generateFinalStrip() {
-    let finalCanvas = document.getElementById("finalCanvas");
-    let fctx = finalCanvas.getContext("2d");
-
-    let width = finalCanvas.width;
-    let height = finalCanvas.height;
-
-    fctx.fillStyle = "#ffe6f2";
-    fctx.fillRect(0, 0, width, height);
-
-    let imgWidth = width / 3;
-
-    images.forEach((src, i) => {
-        let img = new Image();
-        img.onload = () => {
-            fctx.drawImage(img, i * imgWidth, 0, imgWidth, height);
-            document.getElementById("finalPreview").src = finalCanvas.toDataURL();
-        };
-        img.src = src;
-    });
-}
-
-document.getElementById("downloadBtn").addEventListener("click", () => {
-    let link = document.createElement("a");
-    link.download = "photo_strip.png";
-    link.href = document.getElementById("finalCanvas").toDataURL();
-    link.click();
-});
-</script>
 </body>
 </html>

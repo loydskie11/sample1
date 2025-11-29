@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact • Digital Photobooth</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    * { box-sizing: border-box; }
+    html, body { margin:0; height:100%; font-family:'Poppins',sans-serif; background:linear-gradient(135deg,#ffd6e8,#d6ecff); overflow:hidden; }
+
+    .sidebar {
+        position:fixed; left:0; top:0; bottom:0; width:240px;
+        background:rgba(255,255,255,0.96); backdrop-filter:blur(20px);
+        border-right:1px solid rgba(255,102,163,0.2); box-shadow:10px 0 35px rgba(0,0,0,0.12);
+        padding:40px 20px; display:flex; flex-direction:column; align-items:center; z-index:1000;
+    }
+    .logo {
+        width:70px; height:70px; background:#ff66a3; color:white; font-weight:bold; font-size:36px;
+        border-radius:20px; display:flex; align-items:center; justify-content:center;
+        margin-bottom:50px; cursor:pointer; box-shadow:0 10px 25px rgba(255,102,163,0.5);
+        transition:0.3s; text-decoration:none;
+    }
+    .logo:hover { transform:scale(1.12); }
+
+    .nav-item {
+        width:100%; height:70px; margin:8px 0; padding:0 20px; border-radius:18px;
+        display:flex; align-items:center; color:#ff66a3; font-weight:600; font-size:16px;
+        cursor:pointer; transition:0.3s; text-decoration:none;
+    }
+    .nav-item i { font-size:26px; width:50px; text-align:center; }
+    .nav-item span { margin-left:15px; }
+    .nav-item:hover { background:#ffe6f2; transform:translateX(8px); }
+    .nav-item.active { background:#ff66a3; color:white; box-shadow:0 8px 25px rgba(255,102,163,0.5); }
+
+    .main-content {
+        margin-left:240px; height:100vh; overflow-y:auto; padding:60px 30px;
+        display:flex; justify-content:center; align-items:flex-start;
+    }
+
+    .contact-card {
+        background:white; padding:50px 45px; border-radius:32px;
+        box-shadow:0 20px 60px rgba(0,0,0,0.16); max-width:600px; width:100%; text-align:center;
+    }
+    h1 {
+        font-size:clamp(38px,7vw,52px);
+        background:linear-gradient(135deg,#ff66a3,#ff99c8);
+        -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+        margin-bottom:15px;
+    }
+    .subtitle {
+        font-size:19px; color:#666; margin-bottom:40px; line-height:1.6;
+    }
+
+    .contact-info {
+        display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:30px;
+        margin:50px 0;
+    }
+    .info-box {
+        background:#fff0f8; padding:30px 25px; border-radius:22px;
+        border:3px dashed #ff99c8;
+    }
+    .info-box i {
+        font-size:42px; color:#ff66a3; margin-bottom:18px;
+    }
+    .info-box h3 { margin:10px 0; color:#333; }
+    .info-box p, .info-box a {
+        color:#ff66a3; font-weight:600; text-decoration:none; font-size:17px;
+    }
+
+    .social-links {
+        margin:50px 0;
+    }
+    .social-links a {
+        display:inline-block; width:60px; height:60px; background:#ff66a3; color:white;
+        border-radius:50%; margin:0 12px; font-size:28px; line-height:60px;
+        box-shadow:0 8px 20px rgba(255,102,163,0.4); transition:0.3s;
+    }
+    .social-links a:hover {
+        transform:translateY(-10px) scale(1.1);
+        box-shadow:0 15px 30px rgba(255,102,163,0.5);
+    }
+
+    footer {
+        margin-top:50px; color:#ff66a3; font-size:16px;
+    }
+
+    @media (max-width: 768px) {
+        .sidebar { width:80px; }
+        .main-content { margin-left:80px; padding:40px 20px; }
+        .nav-item span { display:none; }
+        .contact-card { padding:40px 25px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="Main.html" class="logo">PB</a>
+
+    <a href="Dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i><span>Home</span>
+    </a>
+    <a href="About.html" class="nav-item">
+        <i class="fas fa-info-circle"></i><span>About</span>
+    </a>
+    <a href="Contact.html" class="nav-item active">
+        <i class="fas fa-envelope"></i><span>Contact</span>
+    </a>
+</div>
+
+<div class="main-content">
+    <div class="contact-card">
+        <h1>Get in Touch</h1>
+        <p class="subtitle">
+            Have a question? Want this photobooth at your event?<br>We'd love to hear from you!
+        </p>
+
+        <div class="contact-info">
+            <div class="info-box">
+                <i class="fas fa-envelope"></i>
+                <h3>Email Us</h3>
+                <p><a href="mailto:hello@digitalphotobooth.com">hello@digitalphotobooth.com</a></p>
+            </div>
+            <div class="info-box">
+                <i class="fas fa-phone-alt"></i>
+                <h3>Call / WhatsApp</h3>
+                <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
+            </div>
+            <div class="info-box">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Location</h3>
+                <p>Available Worldwide<br>Based in Phillipnes</p>
+            </div>
+            <div class="info-box">
+                <i class="fas fa-calendar-check"></i>
+                <h3>Book for Events</h3>
+                <p>Weddings • Parties • Corporate</p>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+
+        <footer>
+            Made with <i class="fas fa-heart"></i> for unforgettable memories • Always here to help
+        </footer>
+    </div>
+</div>
+
+</body>
+</html>
